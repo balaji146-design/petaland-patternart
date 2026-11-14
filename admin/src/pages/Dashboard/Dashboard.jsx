@@ -144,7 +144,7 @@ function Dashboard() {
         className="mb-8"
       >
         <h1 className="heading-luxury text-2xl sm:text-3xl font-semibold">
-          Welcome back, {adminName} 👋
+          Welcome back, {adminName}
         </h1>
         <p className="text-muted-luxury text-sm mt-1.5">
           Here's what's happening with Petaland PatternArt today.

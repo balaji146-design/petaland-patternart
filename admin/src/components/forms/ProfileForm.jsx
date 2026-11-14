@@ -63,7 +63,6 @@ function ProfileForm({ profile, onSuccess }) {
     return () => {
       if (avatarFile && avatarPreview) URL.revokeObjectURL(avatarPreview)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const showToast = (type, message) => {

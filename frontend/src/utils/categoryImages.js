@@ -24,19 +24,18 @@
 
 // export default getCategoryImage;
 
-// frontend/src/utils/categoryImages.js — complete replacement
 const CATEGORY_IMAGE_MAP = {
-  "bridal henna": "https://loremflickr.com/600/600/henna,bridal,wedding",
-  "arabic henna": "https://loremflickr.com/600/600/henna,arabic",
-  "traditional mehndi": "https://loremflickr.com/600/600/mehndi,traditional",
-  "minimalist henna": "https://loremflickr.com/600/600/henna,minimal",
-  "kids henna": "https://loremflickr.com/600/600/henna,children",
-  "party henna": "https://loremflickr.com/600/600/henna,party",
-  "festival henna": "https://loremflickr.com/600/600/henna,festival",
-  "engagement henna": "https://loremflickr.com/600/600/henna,engagement",
+  "bridal henna": "/assets/images/category-bridal.svg",
+  "arabic henna": "/assets/images/category-arabic.svg",
+  "traditional mehndi": "/assets/images/category-traditional.svg",
+  "minimalist henna": "/assets/images/category-minimalist.svg",
+  "kids henna": "/assets/images/category-kids.svg",
+  "party henna": "/assets/images/category-party.svg",
+  "festival henna": "/assets/images/category-festival.svg",
+  "engagement henna": "/assets/images/category-engagement.svg",
 };
 
-const DEFAULT_CATEGORY_IMAGE = "https://loremflickr.com/600/600/henna,mehndi";
+const DEFAULT_CATEGORY_IMAGE = "/assets/images/category-default.svg";
 
 export function getCategoryImage(categoryName) {
   if (!categoryName) return DEFAULT_CATEGORY_IMAGE;

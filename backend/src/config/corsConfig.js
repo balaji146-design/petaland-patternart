@@ -1,15 +1,31 @@
 import env from "./env.js";
 
-const allowedOrigins = [env.cors.frontendUrl, env.cors.adminUrl].filter(
-  Boolean
-);
+const normalizeOrigin = (origin) => origin?.trim().replace(/\/+$/, "");
+
+const configuredOrigins = [
+  env.cors.frontendUrl,
+  env.cors.adminUrl,
+  ...(process.env.CORS_ORIGINS || "").split(","),
+]
+  .map(normalizeOrigin)
+  .filter(Boolean);
+
+const isLocalDevelopmentOrigin = (origin) =>
+  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
 
 const corsConfig = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    const normalizedOrigin = normalizeOrigin(origin);
+    if (
+      !normalizedOrigin ||
+      configuredOrigins.includes(normalizedOrigin) ||
+      isLocalDevelopmentOrigin(normalizedOrigin)
+    ) {
       callback(null, true);
     } else {
-      callback(new Error(`Origin ${origin} is not allowed by CORS policy`));
+      callback(
+        new Error(`Origin ${origin} is not allowed by CORS policy`)
+      );
     }
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],

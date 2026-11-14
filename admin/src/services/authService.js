@@ -108,8 +108,19 @@ export const fetchAdminProfile = async () => {
   return response.data;
 };
 
+export const getProfile = fetchAdminProfile;
+
+export const updateProfile = async (formData) => {
+  const response = await api.put("/auth/profile", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
+};
+
 export default {
   loginAdmin,
   logoutAdmin,
   fetchAdminProfile,
+  getProfile,
+  updateProfile,
 };

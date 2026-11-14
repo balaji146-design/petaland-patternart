@@ -193,7 +193,6 @@ export function useBanner(autoFetch = true) {
     if (autoFetch) {
       fetchBanners()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFetch])
 
   return {

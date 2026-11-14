@@ -22,7 +22,6 @@ export function useDesigns(params = {}) {
     } finally {
       setIsLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(params)]);
 
   useEffect(() => {

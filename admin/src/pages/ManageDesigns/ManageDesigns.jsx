@@ -336,8 +336,18 @@ function ManageDesigns() {
 
   const filteredDesigns = useMemo(() => {
     return designs.filter((design) => {
-      const matchesSearch = searchTerm
-        ? design.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      const normalizedSearch = searchTerm.trim().toLowerCase()
+      const searchableText = [
+        design.name,
+        design.category_name,
+        design.category,
+        design.description,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      const matchesSearch = normalizedSearch
+        ? searchableText.includes(normalizedSearch)
         : true
 
       const matchesCategory = categoryFilter
@@ -401,7 +411,7 @@ function ManageDesigns() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search designs by name..."
+            placeholder="Search by name, category, or description..."
             className="input-luxury"
           />
         </div>

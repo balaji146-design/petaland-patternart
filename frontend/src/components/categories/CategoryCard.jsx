@@ -39,6 +39,9 @@ function CategoryCard({ name, image, to }) {
       <img
         src={image}
         alt={name}
+        onError={(event) => {
+          event.currentTarget.src = "/assets/images/category-default.svg";
+        }}
         className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-coffee-brown/85 via-coffee-brown/20 to-transparent transition-opacity duration-300 group-hover:from-henna-brown/90" />

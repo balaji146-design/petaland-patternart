@@ -37,7 +37,7 @@
 import { motion } from "framer-motion";
 import CategoryCard from "./CategoryCard.jsx";
 
-function CategoryList({ categories = [] }) {
+function CategoryList({ categories = [], loading = false }) {
   if (!categories || categories.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-beige-dark bg-cream py-20 text-center">
@@ -52,7 +52,7 @@ function CategoryList({ categories = [] }) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4" aria-busy={loading}>
       {categories.map((category, index) => (
         <motion.div
           key={category.id}

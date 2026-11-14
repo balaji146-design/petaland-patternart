@@ -9,7 +9,7 @@
   --color-coffee-brown-light: #6B4E33;
   --color-henna-brown-dark: #5A2D14;
 
-  --font-serif: "Playfair Display", "Georgia", serif;
+  --font-serif: "Batikaya Demo", "Playfair Display", "Georgia", serif;
   --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
 
   --transition-base: 0.3s ease;
@@ -56,6 +56,10 @@ h6 {
   font-weight: 600;
   color: var(--color-henna-brown);
   line-height: 1.25;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
 }
 
 a {

@@ -33,7 +33,6 @@ function useFetch(fetchFn, params = null, options = {}) {
     if (immediate) {
       fetchData().catch(() => {});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [immediate, ...deps]);
 
   const refetch = useCallback(() => fetchData(), [fetchData]);

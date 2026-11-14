@@ -78,7 +78,6 @@ export function useDesigns(autoFetch = false) {
     if (autoFetch) {
       fetchDesigns()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoFetch])
 
   return {

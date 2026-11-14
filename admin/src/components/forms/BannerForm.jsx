@@ -58,7 +58,6 @@ function BannerForm({ existingBanner, onSuccess }) {
     return () => {
       if (imageFile && imagePreview) URL.revokeObjectURL(imagePreview)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const showToast = (type, message) => {

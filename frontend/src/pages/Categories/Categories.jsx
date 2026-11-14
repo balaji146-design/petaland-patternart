@@ -93,8 +93,23 @@ import CategoryList from "../../components/categories/CategoryList.jsx";
 import { getCategories } from "../../services/categoryService.js";
 import { getCategoryImage } from "../../utils/categoryImages.js";
 
+const DEFAULT_CATEGORIES = [
+  "Bridal Henna",
+  "Arabic Henna",
+  "Traditional Mehndi",
+  "Minimalist Henna",
+  "Kids Henna",
+  "Party Henna",
+  "Festival Henna",
+  "Engagement Henna",
+].map((name, index) => ({
+  id: `default-category-${index + 1}`,
+  name,
+  image: getCategoryImage(name),
+}));
+
 function Categories() {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -109,7 +124,7 @@ function Categories() {
           name: c.name,
           image: getCategoryImage(c.name),
         }));
-        if (mounted) setCategories(normalized);
+        if (mounted && normalized.length > 0) setCategories(normalized);
       } catch (err) {
         console.error("Failed to load categories", err);
       } finally {
@@ -156,11 +171,7 @@ function Categories() {
       </section>
 
       <section className="container-luxury py-16">
-        {loading ? (
-          <p className="text-center text-sm text-coffee-brown/60">Loading categories...</p>
-        ) : (
-          <CategoryList categories={categories} />
-        )}
+        <CategoryList categories={categories} loading={loading} />
       </section>
     </div>
   );

@@ -23,12 +23,12 @@ function DesignsGrid({ designs = [], loading = false, onView, onEdit, onDelete }
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
       {designs.map((d) => (
-        <div key={d.id} className="glass-card p-4 flex flex-col h-full">
-          <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden bg-[#1a1410] mb-3">
+        <div key={d.id} className="glass-card flex h-full min-w-0 flex-col p-4">
+          <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-md bg-[#1a1410]">
             {d.image_url ? (
-              <img src={d.image_url} alt={d.name} className="w-full h-full object-cover" />
+              <img src={d.image_url} alt={d.name} className="h-full w-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-luxury">No Image</div>
             )}
@@ -38,17 +38,17 @@ function DesignsGrid({ designs = [], loading = false, onView, onEdit, onDelete }
           </div>
 
           <div className="flex-1">
-            <h3 className="text-sm text-[#f5ead9] font-medium truncate">{d.name}</h3>
-            <p className="text-xs text-muted-luxury mt-1 truncate">{d.category_name || d.category || 'Uncategorized'}</p>
-            <div className="mt-2 flex items-center justify-between">
+            <h3 className="truncate text-sm font-medium text-[#f5ead9]">{d.name}</h3>
+            <p className="mt-1 truncate text-xs text-muted-luxury">{d.category_name || d.category || 'Uncategorized'}</p>
+            <div className="mt-auto flex items-end justify-between gap-3 pt-3">
               <div>
                 <p className="text-sm text-[#f5ead9]">{formatCurrency(d.actual_price)}</p>
                 <p className="text-xs text-[#e0bb63]">{formatCurrency(d.offer_price)}</p>
               </div>
-              <div className="flex items-center gap-2">
-                <button onClick={() => onView?.(d)} className="p-2 rounded-lg text-muted-luxury hover:bg-[#c9a24b]/10 transition"><Eye className="w-4 h-4" /></button>
-                <button onClick={() => onEdit?.(d)} className="p-2 rounded-lg text-muted-luxury hover:bg-[#c9a24b]/10 transition"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => onDelete?.(d)} className="p-2 rounded-lg text-muted-luxury hover:bg-red-500/10 transition"><Trash2 className="w-4 h-4" /></button>
+              <div className="flex shrink-0 items-center gap-1">
+                <button type="button" onClick={() => onView?.(d)} aria-label={`View ${d.name}`} className="rounded-lg p-2 text-muted-luxury transition hover:bg-[#c9a24b]/10"><Eye className="h-4 w-4" /></button>
+                <button type="button" onClick={() => onEdit?.(d)} aria-label={`Edit ${d.name}`} className="rounded-lg p-2 text-muted-luxury transition hover:bg-[#c9a24b]/10"><Pencil className="h-4 w-4" /></button>
+                <button type="button" onClick={() => onDelete?.(d)} aria-label={`Delete ${d.name}`} className="rounded-lg p-2 text-muted-luxury transition hover:bg-red-500/10"><Trash2 className="h-4 w-4" /></button>
               </div>
             </div>
           </div>

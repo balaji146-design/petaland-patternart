@@ -165,9 +165,11 @@ function Header({ onToggleSidebar }) {
     <header className="glass-panel sticky top-0 z-40 flex items-center justify-between px-4 sm:px-6 py-3.5 rounded-none border-x-0 border-t-0">
       <div className="flex items-center gap-3 min-w-0">
         <button
+          type="button"
           onClick={onToggleSidebar}
-          className="p-2 rounded-lg hover:bg-[#c9a24b]/10 text-[#c9a24b] transition lg:hidden flex-shrink-0"
-          aria-label="Toggle sidebar"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-[#c9a24b] transition hover:bg-[#c9a24b]/10 focus:outline-none focus:ring-2 focus:ring-[#c9a24b]/60 lg:hidden flex-shrink-0"
+          aria-label="Open navigation menu"
+          title="Open navigation menu"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -187,8 +189,12 @@ function Header({ onToggleSidebar }) {
 
       <div className="relative flex-shrink-0" ref={menuRef}>
         <button
+          type="button"
           onClick={() => setMenuOpen((prev) => !prev)}
           className="flex items-center gap-2 sm:gap-2.5 pl-2 pr-2 sm:pr-3 py-1.5 rounded-full hover:bg-[#c9a24b]/10 transition"
+          aria-expanded={menuOpen}
+          aria-haspopup="menu"
+          aria-label="Open account menu"
         >
           <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-br from-[#5c3a21] to-[#3e2b23] border border-[#c9a24b]/40 flex items-center justify-center">
             <span className="text-xs font-semibold text-[#e0bb63]">{initials}</span>

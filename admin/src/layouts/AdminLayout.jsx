@@ -43,7 +43,7 @@ function AdminLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const toggleSidebar = () => {
-    if (window.innerWidth < 1024) {
+    if (window.matchMedia('(max-width: 1023px)').matches) {
       setMobileOpen((prev) => !prev)
     } else {
       setCollapsed((prev) => !prev)
@@ -54,7 +54,7 @@ function AdminLayout({ children }) {
 
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth >= 1024 && mobileOpen) {
+      if (window.matchMedia('(min-width: 1024px)').matches && mobileOpen) {
         setMobileOpen(false)
       }
     }

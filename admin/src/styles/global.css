@@ -79,6 +79,7 @@
    ========================================================================== */
 
 .admin-sidebar {
+  overflow: hidden;
   background: linear-gradient(180deg, var(--color-bg-panel) 0%, var(--color-henna-dark) 100%);
   border-right: 1px solid var(--glass-border);
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
@@ -271,10 +272,6 @@
   .admin-sidebar {
     position: fixed;
     z-index: 50;
-    transform: translateX(-100%);
-  }
-
-  .admin-sidebar.open {
-    transform: translateX(0);
+    width: min(16rem, 85vw);
   }
 }

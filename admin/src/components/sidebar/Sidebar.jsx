@@ -138,7 +138,8 @@ function Sidebar({ collapsed, mobileOpen, onCloseMobile }) {
       )}
 
       <aside
-        className={`admin-sidebar fixed lg:sticky top-0 left-0 h-screen z-50 flex flex-col transition-all duration-300 ease-in-out
+        aria-label="Admin navigation"
+        className={`admin-sidebar fixed lg:sticky top-0 bottom-0 left-0 h-screen z-50 flex flex-col transition-transform duration-300 ease-in-out
           w-64 max-w-[85vw] lg:max-w-none
           ${collapsed ? 'lg:w-20' : 'lg:w-64'}
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
@@ -160,9 +161,11 @@ function Sidebar({ collapsed, mobileOpen, onCloseMobile }) {
           </div>
 
           <button
+            type="button"
             onClick={onCloseMobile}
-            className="lg:hidden p-1.5 rounded-lg hover:bg-[#c9a24b]/10 text-[#c9a24b] transition flex-shrink-0"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-[#c9a24b] transition hover:bg-[#c9a24b]/10 focus:outline-none focus:ring-2 focus:ring-[#c9a24b]/60 lg:hidden flex-shrink-0"
             aria-label="Close sidebar"
+            title="Close navigation menu"
           >
             <X className="w-5 h-5" />
           </button>

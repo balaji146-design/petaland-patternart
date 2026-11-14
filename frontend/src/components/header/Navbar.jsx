@@ -197,7 +197,7 @@ function Navbar() {
                       initial={false}
                       animate={{ width: isActive ? "100%" : "0%" }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="absolute -bottom-1 left-0 h-[2px] bg-soft-gold"
+                      className="pointer-events-none absolute -bottom-1 left-0 block h-[2px] rounded-full bg-soft-gold"
                     />
                   </>
                 )}

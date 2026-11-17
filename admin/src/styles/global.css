@@ -1,25 +1,25 @@
 /* ==========================================================================
    PETALAND PATTERNART — Admin Premium Luxury Theme
-   Dark Luxury Dashboard | Glassmorphism | Henna Inspired
+   Light Dashboard | Baby Pink | Black
    ========================================================================== */
 
 :root {
-  --color-cream: #f5ead9;
-  --color-beige: #e8d9bd;
-  --color-coffee: #3e2b23;
-  --color-henna: #5c3a21;
-  --color-henna-dark: #2a1c14;
-  --color-gold: #e39a68;
-  --color-gold-light: #ffd0a8;
-  --color-bg-deep: #17131f;
-  --color-bg-panel: #271a2b;
+  --color-cream: #ffffff;
+  --color-beige: #fce7ef;
+  --color-coffee: #171717;
+  --color-henna: #111111;
+  --color-henna-dark: #fff3f7;
+  --color-gold: #e9a1b9;
+  --color-gold-light: #c85f83;
+  --color-bg-deep: #ffffff;
+  --color-bg-panel: #fff7fa;
 
-  --glass-bg: rgba(245, 234, 217, 0.06);
-  --glass-border: rgba(201, 162, 75, 0.25);
-  --glass-blur: 16px;
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(200, 95, 131, 0.2);
+  --glass-blur: 12px;
 
-  --shadow-luxury: 0 8px 32px rgba(0, 0, 0, 0.45);
-  --shadow-gold-glow: 0 0 24px rgba(201, 162, 75, 0.25);
+  --shadow-luxury: 0 8px 28px rgba(36, 16, 25, 0.08);
+  --shadow-gold-glow: 0 0 24px rgba(200, 95, 131, 0.16);
 
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -35,9 +35,9 @@
 .admin-bg {
   min-height: 100vh;
   background:
-    radial-gradient(circle at 20% 10%, rgba(227, 154, 104, 0.13), transparent 45%),
-    radial-gradient(circle at 80% 90%, rgba(109, 52, 89, 0.3), transparent 50%),
-    linear-gradient(160deg, var(--color-bg-deep) 0%, var(--color-henna-dark) 100%);
+    radial-gradient(circle at 10% 0%, rgba(252, 231, 239, 0.9), transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(246, 205, 220, 0.55), transparent 42%),
+    linear-gradient(160deg, #ffffff 0%, #fff8fb 100%);
   background-attachment: fixed;
 }
 
@@ -57,11 +57,11 @@
 
 .glass-panel:hover {
   box-shadow: var(--shadow-luxury), var(--shadow-gold-glow);
-  border-color: rgba(201, 162, 75, 0.4);
+  border-color: rgba(200, 95, 131, 0.35);
 }
 
 .glass-card {
-  background: linear-gradient(145deg, rgba(245, 234, 217, 0.05), rgba(245, 234, 217, 0.02));
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(252, 231, 239, 0.45));
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -80,9 +80,9 @@
 
 .admin-sidebar {
   overflow: hidden;
-  background: linear-gradient(180deg, var(--color-bg-panel) 0%, var(--color-henna-dark) 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fff4f8 100%);
   border-right: 1px solid var(--glass-border);
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 4px 0 24px rgba(36, 16, 25, 0.08);
 }
 
 .sidebar-link {
@@ -91,18 +91,18 @@
   gap: 0.75rem;
   padding: 0.75rem 1.25rem;
   border-radius: var(--radius-md);
-  color: var(--color-beige);
+  color: var(--color-coffee);
   transition: var(--transition-smooth);
 }
 
 .sidebar-link:hover {
-  background: rgba(201, 162, 75, 0.12);
+  background: rgba(252, 231, 239, 0.8);
   color: var(--color-gold-light);
   transform: translateX(4px);
 }
 
 .sidebar-link.active {
-  background: linear-gradient(90deg, rgba(201, 162, 75, 0.22), rgba(201, 162, 75, 0.05));
+  background: linear-gradient(90deg, rgba(252, 231, 239, 0.95), rgba(252, 231, 239, 0.35));
   color: var(--color-gold-light);
   border-left: 3px solid var(--color-gold);
 }
@@ -145,16 +145,16 @@
    ========================================================================== */
 
 .input-luxury {
-  background: rgba(245, 234, 217, 0.05);
+  background: #ffffff;
   border: 1px solid var(--glass-border);
-  color: var(--color-cream);
+  color: var(--color-coffee);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   transition: var(--transition-smooth);
 }
 
 .input-luxury::placeholder {
-  color: rgba(245, 234, 217, 0.4);
+  color: rgba(23, 23, 23, 0.45);
 }
 
 .input-luxury:focus {
@@ -237,12 +237,17 @@
 
 .heading-luxury {
   font-family: 'Playfair Display', 'Georgia', serif;
-  color: var(--color-gold-light);
+  color: var(--color-coffee);
   letter-spacing: 0.5px;
 }
 
 .text-muted-luxury {
-  color: rgba(245, 234, 217, 0.6);
+  color: rgba(23, 23, 23, 0.62);
+}
+
+.admin-bg [class~="text-[#f5ead9]"],
+.admin-bg [class~="text-[#e8d9bd]"] {
+  color: var(--color-coffee) !important;
 }
 
 /* ==========================================================================

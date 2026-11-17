@@ -800,7 +800,7 @@ function DesignForm({ initialData = null, onSuccess }) {
 
         <div>
           <label className="block text-sm text-muted-luxury mb-2">
-            Design Pages
+            Design Pages <span className="text-xs text-muted-luxury">(1-5 pages, one is enough)</span>
           </label>
 
           {imagePreviews.length === 0 ? (
@@ -830,7 +830,7 @@ function DesignForm({ initialData = null, onSuccess }) {
                   <span className="text-[#e0bb63] underline">browse</span>
                 </p>
                 <p className="text-xs text-muted-luxury mt-1">
-                  JPG, PNG or WEBP — Max 5MB
+                  JPG, PNG or WEBP — Max 5MB each · Upload 1 to 5 pages
                 </p>
               </div>
               <input

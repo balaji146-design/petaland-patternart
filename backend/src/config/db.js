@@ -49,9 +49,19 @@ export async function connectDB() {
   try {
     const client = await pool.connect();
     await client.query("SELECT NOW()");
+    await client.query(`
+      ALTER TABLE designs
+      ADD COLUMN IF NOT EXISTS images JSONB NOT NULL DEFAULT '[]'::jsonb
+    `);
+    await client.query(`
+      UPDATE designs
+      SET images = jsonb_build_array(image)
+      WHERE images = '[]'::jsonb AND image IS NOT NULL
+    `);
     client.release();
 
     console.log("PostgreSQL database connected successfully");
+    console.log("Design image pages schema is ready");
   } catch (error) {
     console.error("PostgreSQL connection failed:", error.message);
     throw error;

@@ -26,30 +26,30 @@ function GlobalFallback() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#1a1410] text-[#f5ead9] font-sans antialiased selection:bg-[#c9a24b] selection:text-[#1a1410]">
+    <div className="min-h-screen bg-white text-black font-sans antialiased selection:bg-pink-200 selection:text-black">
       <Toaster
         position="top-right"
         gutter={12}
         toastOptions={{
           duration: 3500,
           style: {
-            background: 'rgba(36, 25, 15, 0.95)',
-            color: '#f5ead9',
-            border: '1px solid rgba(201, 162, 75, 0.25)',
+            background: 'rgba(255, 255, 255, 0.98)',
+            color: '#171717',
+            border: '1px solid rgba(200, 95, 131, 0.2)',
             borderRadius: '12px',
             fontSize: '14px',
             backdropFilter: 'blur(12px)',
           },
           success: {
             iconTheme: {
-              primary: '#c9a24b',
-              secondary: '#1a1410',
+              primary: '#c85f83',
+              secondary: '#ffffff',
             },
           },
           error: {
             iconTheme: {
               primary: '#ef4444',
-              secondary: '#1a1410',
+              secondary: '#ffffff',
             },
           },
         }}

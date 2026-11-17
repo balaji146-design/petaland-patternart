@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS banners (
     title VARCHAR(200),
     subtitle VARCHAR(300),
     image TEXT NOT NULL,
+    images JSONB NOT NULL DEFAULT '[]'::jsonb,
     is_active BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

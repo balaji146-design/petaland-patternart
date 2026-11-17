@@ -150,7 +150,7 @@ export async function getFeaturedDesigns(req, res, next) {
 
 export async function createDesign(req, res, next) {
   try {
-    const design = await designService.createDesign(req.body, req.file);
+    const design = await designService.createDesign(req.body, req.files);
 
     return res.status(201).json({
       success: true,
@@ -166,7 +166,7 @@ export async function updateDesign(req, res, next) {
   try {
     const { id } = req.params;
 
-    const design = await designService.updateDesign(id, req.body, req.file);
+    const design = await designService.updateDesign(id, req.body, req.files);
 
     return res.status(200).json({
       success: true,

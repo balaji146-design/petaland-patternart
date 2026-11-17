@@ -73,12 +73,15 @@
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 
-function DesignCard({ design }) {
+function DesignCard({ design, onSelect }) {
   const name = design?.name || "Untitled Design";
   const image = design?.image || design?.image_url || "";
   const category = design?.category || design?.category_name || "Uncategorized";
   const actualPrice = Number(design?.actualPrice ?? design?.actual_price ?? 0);
   const offerPrice = Number(design?.offerPrice ?? design?.offer_price ?? actualPrice);
+  const images = [image, ...(Array.isArray(design?.images) ? design.images : [])].filter(
+    (value, index, list) => value && list.indexOf(value) === index
+  ).slice(0, 5);
 
   const discount =
     actualPrice > 0 && offerPrice > 0 && actualPrice > offerPrice
@@ -95,7 +98,12 @@ function DesignCard({ design }) {
       transition={{ duration: 0.3, ease: "easeOut" }}
       className="group overflow-hidden rounded-xl border border-beige-dark bg-cream shadow-luxury"
     >
-      <div className="relative h-64 w-full overflow-hidden bg-beige/40">
+      <button
+        type="button"
+        onClick={() => onSelect?.(design)}
+        className="relative block h-64 w-full overflow-hidden bg-beige/40 text-left"
+        aria-label={`View ${name} pages`}
+      >
         {image ? (
           <img
             src={image}
@@ -112,17 +120,24 @@ function DesignCard({ design }) {
         <span className="absolute left-3 top-3 rounded-full bg-henna-brown px-3 py-1 text-xs font-medium tracking-wide text-cream shadow-md">
           {category}
         </span>
+        {images.length > 1 && (
+          <span className="absolute bottom-3 left-3 rounded-full bg-coffee-brown/80 px-3 py-1 text-xs font-medium text-cream">
+            {images.length} pages · Swipe to view
+          </span>
+        )}
 
         {discount > 0 && (
           <span className="absolute right-3 top-3 rounded-full bg-soft-gold px-3 py-1 text-xs font-semibold text-coffee-brown shadow-md">
             {discount}% OFF
           </span>
         )}
-      </div>
+      </button>
 
       <div className="p-5">
         <h3 className="mb-2 font-serif text-lg font-semibold text-henna-brown">
-          {name}
+          <button type="button" onClick={() => onSelect?.(design)} className="text-left hover:underline">
+            {name}
+          </button>
         </h3>
 
         <div className="mb-4 flex items-center gap-3">

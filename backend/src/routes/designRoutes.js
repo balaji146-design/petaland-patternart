@@ -8,7 +8,7 @@ import {
   deleteDesign,
 } from "../controllers/designController.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { uploadSingleImage } from "../middleware/uploadMiddleware.js";
+import { uploadMultipleImages } from "../middleware/uploadMiddleware.js";
 import {
   createDesignValidator,
   updateDesignValidator,
@@ -24,7 +24,7 @@ router.get("/:id", getDesignById);
 router.post(
   "/",
   protect,
-  ...uploadSingleImage("image"),
+  ...uploadMultipleImages("images", 5),
   createDesignValidator,
   validateMiddleware,
   createDesign
@@ -33,7 +33,7 @@ router.post(
 router.put(
   "/:id",
   protect,
-  ...uploadSingleImage("image"),
+  ...uploadMultipleImages("images", 5),
   updateDesignValidator,
   validateMiddleware,
   updateDesign

@@ -275,6 +275,7 @@ function normalizeDesign(d) {
     name: d.name,
     description: d.description,
     image: d.image || d.image_url || d.imageUrl || "",
+    images: Array.isArray(d.images) ? d.images : [],
     categoryId: d.category_id || d.categoryId || "",
     category: d.category_name || d.category || "Uncategorized",
     actualPrice: Number(d.actual_price ?? d.actualPrice ?? 0),
@@ -372,7 +373,7 @@ function Designs() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto max-w-xl text-sm text-coffee-brown sm:text-base"
           >
-            From intricate bridal mandalas to minimalist everyday charm, browse our full range of handcrafted henna artistry.
+            Choose a design, open it to swipe through up to five pages of the artist's work, then book your favourite directly on WhatsApp.
           </motion.p>
         </div>
       </section>

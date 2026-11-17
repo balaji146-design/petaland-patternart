@@ -193,7 +193,7 @@ async function getAll(filters = {}) {
 
     const result = await query(
       `SELECT d.id, d.category_id, c.name AS category_name, d.name, d.description,
-              d.image AS image_url, d.actual_price, d.offer_price, d.featured, d.created_at, d.updated_at
+              d.image AS image_url, d.images, d.actual_price, d.offer_price, d.featured, d.created_at, d.updated_at
        FROM designs d
        LEFT JOIN categories c ON c.id = d.category_id
        ${whereClause}
@@ -211,7 +211,7 @@ async function getById(id) {
   try {
     const result = await query(
       `SELECT d.id, d.category_id, c.name AS category_name, d.name, d.description,
-              d.image, d.actual_price, d.offer_price, d.featured, d.created_at, d.updated_at
+              d.image, d.images, d.actual_price, d.offer_price, d.featured, d.created_at, d.updated_at
        FROM designs d
        LEFT JOIN categories c ON c.id = d.category_id
        WHERE d.id = $1 LIMIT 1`,
@@ -228,7 +228,7 @@ async function getFeatured() {
   try {
     const result = await query(
       `SELECT d.id, d.category_id, c.name AS category_name, d.name, d.description,
-              d.image AS image_url, d.actual_price, d.offer_price, d.featured, d.created_at, d.updated_at
+              d.image AS image_url, d.images, d.actual_price, d.offer_price, d.featured, d.created_at, d.updated_at
        FROM designs d
        LEFT JOIN categories c ON c.id = d.category_id
        WHERE d.featured = true
@@ -248,16 +248,17 @@ async function create(data) {
       name,
       description,
       image,
+      images = [image],
       actualPrice,
       offerPrice,
       featured = false,
     } = data;
 
     const result = await query(
-      `INSERT INTO designs (category_id, name, description, image, actual_price, offer_price, featured, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-       RETURNING id, category_id, name, description, image AS image_url, actual_price, offer_price, featured, created_at, updated_at`,
-      [categoryId, name, description, image, actualPrice, offerPrice, featured]
+      `INSERT INTO designs (category_id, name, description, image, images, actual_price, offer_price, featured, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5::jsonb, $6, $7, $8, NOW(), NOW())
+       RETURNING id, category_id, name, description, image AS image_url, images, actual_price, offer_price, featured, created_at, updated_at`,
+      [categoryId, name, description, image, JSON.stringify(images), actualPrice, offerPrice, featured]
     );
 
     return result.rows[0];
@@ -273,6 +274,7 @@ async function update(id, data) {
       name,
       description,
       image,
+      images,
       actualPrice,
       offerPrice,
       featured,
@@ -284,17 +286,19 @@ async function update(id, data) {
            name = COALESCE($2, name),
            description = COALESCE($3, description),
            image = COALESCE($4, image),
-           actual_price = COALESCE($5, actual_price),
-           offer_price = COALESCE($6, offer_price),
-           featured = COALESCE($7, featured),
+           images = COALESCE($5::jsonb, images),
+           actual_price = COALESCE($6, actual_price),
+           offer_price = COALESCE($7, offer_price),
+           featured = COALESCE($8, featured),
            updated_at = NOW()
-       WHERE id = $8
-       RETURNING id, category_id, name, description, image AS image_url, actual_price, offer_price, featured, created_at, updated_at`,
+       WHERE id = $9
+       RETURNING id, category_id, name, description, image AS image_url, images, actual_price, offer_price, featured, created_at, updated_at`,
       [
         categoryId || null,
         name || null,
         description || null,
         image || null,
+        images ? JSON.stringify(images) : null,
         actualPrice ?? null,
         offerPrice ?? null,
         featured ?? null,

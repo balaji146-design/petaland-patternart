@@ -227,14 +227,17 @@ async function getFeaturedDesigns() {
   return Design.getFeatured();
 }
 
-async function createDesign(data, imageFile) {
-  if (!imageFile) {
+async function createDesign(data, imageFiles = []) {
+  const files = Array.isArray(imageFiles) ? imageFiles : [];
+  if (files.length === 0) {
     const error = new Error("Design image is required");
     error.statusCode = 400;
     throw error;
   }
 
-  const imageUrl = await supabaseService.uploadDesignImage(imageFile);
+  const imageUrls = await Promise.all(
+    files.slice(0, 5).map((file) => supabaseService.uploadDesignImage(file))
+  );
 
   const actual = Number(data.actualPrice);
   const offer =
@@ -246,14 +249,15 @@ async function createDesign(data, imageFile) {
     categoryId: data.categoryId,
     name: data.name,
     description: data.description,
-    image: imageUrl,
+    image: imageUrls[0],
+    images: imageUrls,
     actualPrice: actual,
     offerPrice: offer,
     featured: data.featured === "true" || data.featured === true,
   });
 }
 
-async function updateDesign(id, data, imageFile) {
+async function updateDesign(id, data, imageFiles = []) {
   const existingDesign = await Design.getById(id);
   if (!existingDesign) {
     const error = new Error("Design not found");
@@ -261,12 +265,21 @@ async function updateDesign(id, data, imageFile) {
     throw error;
   }
 
+  const files = Array.isArray(imageFiles) ? imageFiles : [];
   let imageUrl = existingDesign.image_url;
+  let images = Array.isArray(existingDesign.images) && existingDesign.images.length > 0
+    ? existingDesign.images
+    : [imageUrl];
 
-  if (imageFile) {
-    imageUrl = await supabaseService.uploadDesignImage(imageFile);
+  if (files.length > 0) {
+    const previousImages = images;
+    const uploadedImages = await Promise.all(
+      files.slice(0, 5).map((file) => supabaseService.uploadDesignImage(file))
+    );
+    imageUrl = uploadedImages[0];
+    images = uploadedImages;
     try {
-      await supabaseService.deleteImage(existingDesign.image_url);
+      await Promise.all(previousImages.filter(Boolean).map((url) => supabaseService.deleteImage(url)));
     } catch (err) {
       console.error('Failed to delete old design image from storage:', err.message || err);
     }
@@ -277,6 +290,7 @@ async function updateDesign(id, data, imageFile) {
     name: data.name,
     description: data.description,
     image: imageUrl,
+    images,
     actualPrice: data.actualPrice ? Number(data.actualPrice) : undefined,
     offerPrice: data.offerPrice ? Number(data.offerPrice) : undefined,
     featured:
@@ -297,7 +311,8 @@ async function deleteDesign(id) {
   await Design.delete(id);
 
   try {
-    await supabaseService.deleteImage(existingDesign.image_url);
+    const images = Array.isArray(existingDesign.images) ? existingDesign.images : [existingDesign.image_url];
+    await Promise.all(images.filter(Boolean).map((url) => supabaseService.deleteImage(url)));
   } catch (err) {
     console.error('Failed to delete design image from storage:', err.message || err);
   }

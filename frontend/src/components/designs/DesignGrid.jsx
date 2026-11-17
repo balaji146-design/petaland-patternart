@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import DesignCard from "./DesignCard.jsx";
+import DesignModal from "./DesignModal.jsx";
+import { useState } from "react";
 
 function DesignGrid({ designs = [] }) {
+  const [selectedDesign, setSelectedDesign] = useState(null);
+
   if (!designs || designs.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-beige-dark bg-cream py-20 text-center">
@@ -25,9 +29,14 @@ function DesignGrid({ designs = [] }) {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
         >
-          <DesignCard design={design} />
+          <DesignCard design={design} onSelect={setSelectedDesign} />
         </motion.div>
       ))}
+      <DesignModal
+        design={selectedDesign}
+        isOpen={Boolean(selectedDesign)}
+        onClose={() => setSelectedDesign(null)}
+      />
     </div>
   );
 }

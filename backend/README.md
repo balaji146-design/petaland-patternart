@@ -54,6 +54,8 @@ This creates the `admins`, `categories`, `banners`, `designs`, and `contacts` ta
 
 3. Update the default admin password hash in `database/schema.sql` or via a direct update query before going to production.
 
+For an existing database, apply `database/migrations/001_add_design_images.sql` to enable up to five swipeable pages per design.
+
 ## Supabase Storage Setup
 
 1. Create a storage bucket in your Supabase project matching `SUPABASE_BUCKET` in your `.env` file.

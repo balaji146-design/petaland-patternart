@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS designs (
     actual_price NUMERIC(10, 2) NOT NULL CHECK (actual_price >= 0),
     offer_price NUMERIC(10, 2) NOT NULL CHECK (offer_price >= 0),
     image TEXT NOT NULL,
+    images JSONB NOT NULL DEFAULT '[]'::jsonb,
     featured BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

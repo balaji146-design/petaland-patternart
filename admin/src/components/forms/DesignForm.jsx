@@ -450,7 +450,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   UploadCloud,
-  ImageIcon,
   X,
   Star,
   Loader2,
@@ -520,10 +519,11 @@ function DesignForm({ initialData = null, onSuccess }) {
   const [categories, setCategories] = useState([])
   const [categoriesLoading, setCategoriesLoading] = useState(true)
 
-  const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview] = useState(
-    initialData?.image_url || initialData?.image || null
-  )
+  const initialImages = Array.isArray(initialData?.images) && initialData.images.length
+    ? initialData.images
+    : [initialData?.image_url || initialData?.image].filter(Boolean)
+  const [imageFiles, setImageFiles] = useState([])
+  const [imagePreviews, setImagePreviews] = useState(initialImages)
   const [isDragging, setIsDragging] = useState(false)
 
   const [toast, setToast] = useState(null)
@@ -552,7 +552,7 @@ function DesignForm({ initialData = null, onSuccess }) {
 
   useEffect(() => {
     return () => {
-      if (imageFile && imagePreview) URL.revokeObjectURL(imagePreview)
+      imagePreviews.filter((preview) => preview.startsWith('blob:')).forEach((preview) => URL.revokeObjectURL(preview))
     }
   }, [])
 
@@ -570,34 +570,38 @@ function DesignForm({ initialData = null, onSuccess }) {
     setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
-  const handleFileSelect = useCallback((file) => {
-    const result = validateImage(file)
-    if (!result.valid) {
-      setErrors((prev) => ({ ...prev, image: result.message }))
+  const handleFileSelect = useCallback((files) => {
+    const selectedFiles = Array.from(files || [])
+    if (selectedFiles.length === 0) return
+    if (selectedFiles.length > 5) {
+      setErrors((prev) => ({ ...prev, image: 'A design can contain up to 5 pages' }))
+      return
+    }
+    const invalidFile = selectedFiles.map((file) => validateImage(file)).find((result) => !result.valid)
+    if (invalidFile) {
+      setErrors((prev) => ({ ...prev, image: invalidFile.message }))
       return
     }
     setErrors((prev) => ({ ...prev, image: '' }))
-    setImageFile(file)
-    setImagePreview(fileToPreviewUrl(file))
+    setImageFiles(selectedFiles)
+    setImagePreviews(selectedFiles.map(fileToPreviewUrl))
   }, [])
 
   const handleDrop = (e) => {
     e.preventDefault()
     setIsDragging(false)
-    const file = e.dataTransfer.files?.[0]
-    if (file) handleFileSelect(file)
+    handleFileSelect(e.dataTransfer.files)
   }
 
   const handleBrowseClick = () => fileInputRef.current?.click()
 
   const handleFileInputChange = (e) => {
-    const file = e.target.files?.[0]
-    if (file) handleFileSelect(file)
+    handleFileSelect(e.target.files)
   }
 
   const removeImage = () => {
-    setImageFile(null)
-    setImagePreview(null)
+    setImageFiles([])
+    setImagePreviews([])
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
@@ -615,8 +619,8 @@ function DesignForm({ initialData = null, onSuccess }) {
     )
       newErrors.offerPrice = 'Offer price cannot exceed actual price'
 
-    const hasExistingImage = Boolean(initialData?.image_url || initialData?.image)
-    if (!imageFile && !hasExistingImage) newErrors.image = 'Please upload a design image'
+    const hasExistingImage = initialImages.length > 0
+    if (imageFiles.length === 0 && !hasExistingImage) newErrors.image = 'Please upload at least one design page'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -624,8 +628,8 @@ function DesignForm({ initialData = null, onSuccess }) {
 
   const resetForm = () => {
     setFormData(buildInitialFormState(initialData))
-    setImageFile(null)
-    setImagePreview(initialData?.image_url || initialData?.image || null)
+    setImageFiles([])
+    setImagePreviews(initialImages)
     if (fileInputRef.current) fileInputRef.current.value = ''
     setErrors({})
   }
@@ -642,7 +646,7 @@ function DesignForm({ initialData = null, onSuccess }) {
       payload.append('actualPrice', formData.actualPrice)
       payload.append('offerPrice', formData.offerPrice || formData.actualPrice)
       payload.append('featured', formData.featured)
-      if (imageFile) payload.append('image', imageFile)
+      imageFiles.forEach((file) => payload.append('images', file))
 
       if (isEditMode) {
         await editDesign(initialData.id, payload)
@@ -796,10 +800,10 @@ function DesignForm({ initialData = null, onSuccess }) {
 
         <div>
           <label className="block text-sm text-muted-luxury mb-2">
-            Design Image
+            Design Pages
           </label>
 
-          {!imagePreview ? (
+          {imagePreviews.length === 0 ? (
             <div
               onDragOver={(e) => {
                 e.preventDefault()
@@ -822,7 +826,7 @@ function DesignForm({ initialData = null, onSuccess }) {
               </div>
               <div className="text-center">
                 <p className="text-sm text-[#e8d9bd]">
-                  Drag & drop your image here, or{' '}
+                  Drag & drop up to 5 pages here, or{' '}
                   <span className="text-[#e0bb63] underline">browse</span>
                 </p>
                 <p className="text-xs text-muted-luxury mt-1">
@@ -832,6 +836,7 @@ function DesignForm({ initialData = null, onSuccess }) {
               <input
                 ref={fileInputRef}
                 type="file"
+                multiple
                 accept="image/jpeg,image/png,image/webp,image/jpg"
                 onChange={handleFileInputChange}
                 className="hidden"
@@ -839,44 +844,35 @@ function DesignForm({ initialData = null, onSuccess }) {
             </div>
           ) : (
             <div className="glass-card relative overflow-hidden p-3">
-              <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-[#1a1410]">
-                <img
-                  src={imagePreview}
-                  alt="Design preview"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-2.5 right-2.5 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={handleBrowseClick}
-                    className="px-3 py-1.5 rounded-lg bg-black/60 backdrop-blur-sm text-xs text-white hover:bg-[#c9a24b]/80 transition"
-                  >
-                    Replace
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
+                {imagePreviews.map((preview, index) => (
+                  <div key={preview} className="relative aspect-[3/4] overflow-hidden rounded-lg bg-[#1a1410]">
+                    <img src={preview} alt={`Design page ${index + 1}`} className="h-full w-full object-cover" />
+                    <span className="absolute bottom-2 left-2 rounded-full bg-black/60 px-2 py-1 text-[10px] text-white">
+                      Page {index + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 flex items-center justify-between gap-3">
+                <p className="text-xs text-muted-luxury">{imagePreviews.length}/5 pages selected</p>
+                <div className="flex gap-2">
+                  <button type="button" onClick={handleBrowseClick} className="rounded-lg bg-[#c9a24b]/15 px-3 py-1.5 text-xs text-[#e0bb63] transition hover:bg-[#c9a24b]/25">
+                    Replace pages
                   </button>
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center text-white hover:bg-red-500/80 transition"
-                  >
-                    <X className="w-4 h-4" />
+                  <button type="button" onClick={removeImage} className="rounded-lg bg-red-500/10 px-3 py-1.5 text-xs text-red-200 transition hover:bg-red-500/20">
+                    Clear
                   </button>
                 </div>
               </div>
               <input
                 ref={fileInputRef}
                 type="file"
+                multiple
                 accept="image/jpeg,image/png,image/webp,image/jpg"
                 onChange={handleFileInputChange}
                 className="hidden"
               />
-              {imageFile && (
-                <div className="flex items-center gap-2 mt-2.5 px-1">
-                  <ImageIcon className="w-4 h-4 text-[#c9a24b] flex-shrink-0" />
-                  <p className="text-xs text-muted-luxury truncate">
-                    {imageFile.name}
-                  </p>
-                </div>
-              )}
             </div>
           )}
           {errors.image && (

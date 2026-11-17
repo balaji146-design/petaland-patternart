@@ -1,7 +1,37 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FaWhatsapp, FaTimes } from "react-icons/fa";
+import { FaWhatsapp, FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 function DesignModal({ design, isOpen, onClose }) {
+  const [activePage, setActivePage] = useState(0);
+  const touchStartX = useRef(null);
+  const images = useMemo(
+    () =>
+      [design?.image, ...(Array.isArray(design?.images) ? design.images : [])]
+        .filter((value, index, list) => value && list.indexOf(value) === index)
+        .slice(0, 5),
+    [design]
+  );
+
+  useEffect(() => {
+    setActivePage(0);
+  }, [design]);
+
+  const movePage = (direction) => {
+    setActivePage((current) => (current + direction + images.length) % images.length);
+  };
+
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return;
+    const distance = (event.changedTouches[0]?.clientX ?? touchStartX.current) - touchStartX.current;
+    if (Math.abs(distance) > 40) movePage(distance > 0 ? -1 : 1);
+    touchStartX.current = null;
+  };
+
   if (!design) return null;
 
   const { name, image, category, actualPrice, offerPrice, description } =
@@ -42,12 +72,31 @@ function DesignModal({ design, isOpen, onClose }) {
               <FaTimes />
             </button>
 
-            <div className="h-72 w-full overflow-hidden md:h-auto md:w-1/2">
+            <div
+              className="relative h-72 w-full overflow-hidden bg-coffee-brown/10 md:h-auto md:w-1/2"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
               <img
-                src={image}
-                alt={name}
+                src={images[activePage]}
+                alt={`${name}, page ${activePage + 1}`}
                 className="h-full w-full object-cover"
               />
+              {images.length > 1 && (
+                <>
+                  <button type="button" onClick={() => movePage(-1)} aria-label="Previous page" className="absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-coffee-brown/70 text-cream transition hover:bg-henna-brown">
+                    <FaChevronLeft />
+                  </button>
+                  <button type="button" onClick={() => movePage(1)} aria-label="Next page" className="absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-coffee-brown/70 text-cream transition hover:bg-henna-brown">
+                    <FaChevronRight />
+                  </button>
+                  <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-1.5 rounded-full bg-coffee-brown/70 px-3 py-2">
+                    {images.map((page, index) => (
+                      <button key={page} type="button" onClick={() => setActivePage(index)} aria-label={`View page ${index + 1}`} className={`h-2 w-2 rounded-full transition ${index === activePage ? "bg-soft-gold" : "bg-cream/50"}`} />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="flex w-full flex-col justify-center gap-4 p-6 md:w-1/2 md:overflow-y-auto md:p-10">

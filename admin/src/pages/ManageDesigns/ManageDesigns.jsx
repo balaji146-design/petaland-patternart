@@ -425,9 +425,9 @@ function ManageDesigns() {
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="input-luxury appearance-none"
           >
-            <option value="" className="bg-[#24190f]">All Categories</option>
+            <option value="" className="bg-white text-black">All Categories</option>
             {categories.map((cat) => (
-              <option key={cat.id} value={cat.id} className="bg-[#24190f]">
+              <option key={cat.id} value={cat.id} className="bg-white text-black">
                 {cat.name}
               </option>
             ))}
@@ -443,9 +443,9 @@ function ManageDesigns() {
             onChange={(e) => setFeaturedFilter(e.target.value)}
             className="input-luxury appearance-none"
           >
-            <option value="" className="bg-[#24190f]">All Designs</option>
-            <option value="featured" className="bg-[#24190f]">Featured Only</option>
-            <option value="not-featured" className="bg-[#24190f]">Not Featured</option>
+            <option value="" className="bg-white text-black">All Designs</option>
+            <option value="featured" className="bg-white text-black">Featured Only</option>
+            <option value="not-featured" className="bg-white text-black">Not Featured</option>
           </select>
         </div>
       </motion.div>

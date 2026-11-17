@@ -705,11 +705,11 @@ function DesignForm({ initialData = null, onSuccess }) {
                 errors.categoryId ? 'border-red-500/60' : ''
               )}
             >
-              <option value="" className="bg-[#24190f]">
+              <option value="" className="bg-white text-black">
                 {categoriesLoading ? 'Loading categories...' : 'Select category'}
               </option>
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id} className="bg-[#24190f]">
+                <option key={cat.id} value={cat.id} className="bg-white text-black">
                   {cat.name}
                 </option>
               ))}
